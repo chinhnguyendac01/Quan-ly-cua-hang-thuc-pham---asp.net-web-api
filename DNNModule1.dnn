@@ -1,0 +1,283 @@
+<dotnetnuke type="Package" version="5.0">
+  <packages>
+    <!--<package name="DNNModule1" type="Module" version="00.00.01">
+      <friendlyName>DNNModule1</friendlyName>
+      <description>DNNModule1</description>
+      <iconFile>~/Icons/Sigma/Software_32X32_Standard.png</iconFile>
+      <owner>
+        <name>Christoc.com</name>
+        <organization>Christoc.com</organization>
+        <url>https://www.christoc.com/</url>
+        <email>modules@christoc.com</email>
+      </owner>
+      <license src="License.txt"></license>
+      <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+      <dependencies>
+        <dependency type="CoreVersion">08.00.00</dependency>
+      </dependencies>
+      <components>
+        <component type="Script">
+          <scripts>
+            <basePath>DesktopModules\MVC\DNNModule1</basePath>
+            <script type="Install">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>00.00.01.SqlDataProvider</name>
+              <version>00.00.01</version>
+            </script>
+            <script type="UnInstall">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>Uninstall.SqlDataProvider</name>
+              <version>00.00.01</version>
+            </script>
+          </scripts>
+        </component>
+        <component type="ResourceFile">
+          <resourceFiles>
+            <basePath>DesktopModules/MVC/DNNModule1</basePath>
+            <resourceFile>
+              <name>Resources.zip</name>
+            </resourceFile>
+          </resourceFiles>
+        </component>
+        <component type="Module">
+          <desktopModule>
+            <moduleName>DNNModule1</moduleName>
+            <foldername>DNNModule1</foldername>
+            <businessControllerClass>Christoc.Modules.DNNModule1.Components.FeatureController</businessControllerClass>
+            <supportedFeatures />
+            <moduleDefinitions>
+              <moduleDefinition>
+                <friendlyName>DNNModule1</friendlyName>
+                <defaultCacheTime>0</defaultCacheTime>
+                <moduleControls>
+                  <moduleControl>
+                    <controlKey />
+                    <controlSrc>Christoc.Modules.DNNModule1.Controllers/Item/Index.mvc</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle />
+                    <controlType>View</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Edit</controlKey>
+                    <controlSrc>Christoc.Modules.DNNModule1.Controllers/Item/Edit.mvc</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>Edit Content</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                    <supportsPopUps>True</supportsPopUps>
+                  </moduleControl>
+                  <moduleControl>
+                    <controlKey>Settings</controlKey>
+                    <controlSrc>Christoc.Modules.DNNModule1.Controllers/Settings/Settings.mvc</controlSrc>
+                    <supportsPartialRendering>False</supportsPartialRendering>
+                    <controlTitle>DNNModule1 Settings</controlTitle>
+                    <controlType>Edit</controlType>
+                    <iconFile />
+                    <helpUrl />
+                    <viewOrder>0</viewOrder>
+                  </moduleControl>
+                </moduleControls>
+              </moduleDefinition>
+            </moduleDefinitions>
+          </desktopModule>
+        </component>
+        <component type="Assembly">
+          <assemblies>
+            <assembly>
+              <name>DNNModule1.dll</name>
+              <path>bin</path>
+            </assembly>
+          </assemblies>
+        </component>
+      </components>
+    </package>-->	  
+	<package name="DNNModule1_KhachHang" type="Module" version="00.00.01">
+		  <friendlyName>DNNModule1_KhachHang</friendlyName>
+		  <description>DNNModule1_KhachHang</description>
+		  <iconFile>~/Icons/Sigma/Software_32X32_Standard.png</iconFile>
+		  <owner>
+			  <name>Christoc.com</name>
+			  <organization>Christoc.com</organization>
+			  <url>https://www.christoc.com/</url>
+			  <email>modules@christoc.com</email>
+		  </owner>
+		  <license src="License.txt"></license>
+		  <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+		  <dependencies>
+			  <dependency type="CoreVersion">08.00.00</dependency>
+		  </dependencies>
+		  <components>
+			  
+			  <component type="ResourceFile">
+				  <resourceFiles>
+					  <basePath>DesktopModules/MVC/DNNModule1</basePath>
+					  <resourceFile>
+						  <name>Resources.zip</name>
+					  </resourceFile>
+				  </resourceFiles>
+			  </component>
+			  <component type="Module">
+				  <desktopModule>
+					  <moduleName>DNNModule1_KhachHang</moduleName>
+					  <foldername>DNNModule1</foldername>
+					  <businessControllerClass>Christoc.Modules.DNNModule1.Components.FeatureController</businessControllerClass>
+					  <supportedFeatures />
+					  <moduleDefinitions>
+						  <moduleDefinition>
+							  <friendlyName>DNNModule1_KhachHang</friendlyName>
+							  <defaultCacheTime>0</defaultCacheTime>
+							  <moduleControls>
+								  <moduleControl>
+									  <controlKey />
+									  <controlSrc>Christoc.Modules.DNNModule1.Controllers/KhachHang/Index.mvc</controlSrc>
+									  <supportsPartialRendering>False</supportsPartialRendering>
+									  <controlTitle />
+									  <controlType>View</controlType>
+									  <iconFile />
+									  <helpUrl />
+									  <viewOrder>0</viewOrder>
+								  </moduleControl>					  
+							  </moduleControls>
+						  </moduleDefinition>
+					  </moduleDefinitions>
+				  </desktopModule>
+			  </component>
+			  <component type="Assembly">
+				  <assemblies>
+					  <assembly>
+						  <name>DNNModule1.dll</name>
+						  <path>bin</path>
+					  </assembly>
+				  </assemblies>
+			  </component>
+		  </components>
+	  </package>
+	  <package name="DNNModule1_MonAn" type="Module" version="00.00.01">
+		  <friendlyName>DNNModule1_MonAn</friendlyName>
+		  <description>DNNModule1_MonAn</description>
+		  <iconFile>~/Icons/Sigma/Software_32X32_Standard.png</iconFile>
+		  <owner>
+			  <name>Christoc.com</name>
+			  <organization>Christoc.com</organization>
+			  <url>https://www.christoc.com/</url>
+			  <email>modules@christoc.com</email>
+		  </owner>
+		  <license src="License.txt"></license>
+		  <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+		  <dependencies>
+			  <dependency type="CoreVersion">08.00.00</dependency>
+		  </dependencies>
+		  <components>
+
+			  <component type="ResourceFile">
+				  <resourceFiles>
+					  <basePath>DesktopModules/MVC/DNNModule1</basePath>
+					  <resourceFile>
+						  <name>Resources.zip</name>
+					  </resourceFile>
+				  </resourceFiles>
+			  </component>
+			  <component type="Module">
+				  <desktopModule>
+					  <moduleName>DNNModule1_MonAn</moduleName>
+					  <foldername>DNNModule1</foldername>
+					  <businessControllerClass>Christoc.Modules.DNNModule1.Components.FeatureController</businessControllerClass>
+					  <supportedFeatures />
+					  <moduleDefinitions>
+						  <moduleDefinition>
+							  <friendlyName>DNNModule1_MonAn</friendlyName>
+							  <defaultCacheTime>0</defaultCacheTime>
+							  <moduleControls>
+								  <moduleControl>
+									  <controlKey />
+									  <controlSrc>Christoc.Modules.DNNModule1.Controllers/MonAn/Index.mvc</controlSrc>
+									  <supportsPartialRendering>False</supportsPartialRendering>
+									  <controlTitle />
+									  <controlType>View</controlType>
+									  <iconFile />
+									  <helpUrl />
+									  <viewOrder>0</viewOrder>
+								  </moduleControl>
+							  </moduleControls>
+						  </moduleDefinition>
+					  </moduleDefinitions>
+				  </desktopModule>
+			  </component>
+			  <component type="Assembly">
+				  <assemblies>
+					  <assembly>
+						  <name>DNNModule1.dll</name>
+						  <path>bin</path>
+					  </assembly>
+				  </assemblies>
+			  </component>
+		  </components>
+	  </package>
+
+	  <package name="DNNModule1_LoaiMon" type="Module" version="00.00.01">
+		  <friendlyName>DNNModule1_LoaiMon</friendlyName>
+		  <description>DNNModule1_LoaiMon</description>
+		  <iconFile>~/Icons/Sigma/Software_32X32_Standard.png</iconFile>
+		  <owner>
+			  <name>Christoc.com</name>
+			  <organization>Christoc.com</organization>
+			  <url>https://www.christoc.com/</url>
+			  <email>modules@christoc.com</email>
+		  </owner>
+		  <license src="License.txt"></license>
+		  <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+		  <dependencies>
+			  <dependency type="CoreVersion">08.00.00</dependency>
+		  </dependencies>
+		  <components>
+			  <component type="ResourceFile">
+				  <resourceFiles>
+					  <basePath>DesktopModules/MVC/DNNModule1</basePath>
+					  <resourceFile>
+						  <name>Resources.zip</name>
+					  </resourceFile>
+				  </resourceFiles>
+			  </component>
+			  <component type="Module">
+				  <desktopModule>
+					  <moduleName>DNNModule1_LoaiMon</moduleName>
+					  <foldername>DNNModule1</foldername>
+					  <businessControllerClass>Christoc.Modules.DNNModule1.Components.FeatureController</businessControllerClass>
+					  <supportedFeatures />
+					  <moduleDefinitions>
+						  <moduleDefinition>
+							  <friendlyName>DNNModule1_LoaiMon</friendlyName>
+							  <defaultCacheTime>0</defaultCacheTime>
+							  <moduleControls>
+								  <moduleControl>
+									  <controlKey />
+									  <controlSrc>Christoc.Modules.DNNModule1.Controllers/LoaiMon/Index.mvc</controlSrc>
+									  <supportsPartialRendering>False</supportsPartialRendering>
+									  <controlTitle />
+									  <controlType>View</controlType>
+									  <iconFile />
+									  <helpUrl />
+									  <viewOrder>0</viewOrder>
+								  </moduleControl>
+							  </moduleControls>
+						  </moduleDefinition>
+					  </moduleDefinitions>
+				  </desktopModule>
+			  </component>
+			  <component type="Assembly">
+				  <assemblies>
+					  <assembly>
+						  <name>DNNModule1.dll</name>
+						  <path>bin</path>
+					  </assembly>
+				  </assemblies>
+			  </component>
+		  </components>
+	  </package>
+  </packages>
+</dotnetnuke>

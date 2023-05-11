@@ -1,0 +1,442 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/DesktopModules/MVC/DNNModule1/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .modal-backdrop {
+        display: none;
+    }
+
+    .modal {
+        /* bug fix - custom overlay */
+        background-color: rgba(10,10,10,0.45);
+    }
+
+  
+</style>
+<div>
+    <h3 class="admin-page-content-title header-style">Loại món </h3>
+    <div class="tab-content admin-content-wrapper">
+        <div class="container-fluid container-fluid-second">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="search-group-table-item search-group-table-item-n-btn form-group has-search">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input class="form-control" placeholder="Từ khóa" id="tu-khoa-text-box-menu" oninput="timKiem();" type="text" />
+                    </div>
+                </div>
+                <div class="col-6" style="text-align:right;margin-bottom:1rem">
+                    <button type="button" class="btn btn-success btn-style_themmoi" data-toggle="modal" data-target="#modalLoaiMonAdd">
+                        <span>Thêm mới</span>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-style_xoa" id="btnXoaAll">
+                        <span>Xóa</span>
+                    </button>
+                    <!-- Button trigger modal -->
+
+                    <button id="modal-btn-edit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalLoaiMonEdit" style="display: none">
+                        Cập nhật loại món
+                    </button>
+                    <button id="modal-btn-delete" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalLoaiMonDelete" style="display: none">
+                        Xóa loại món
+                    </button>
+                </div>
+            </div>
+            <div class="table-tree-wrapper">
+                <div style="width:100%; margin:0 auto;" id="hidden-table">
+                    <table id="dataGridLoaiMon" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Stt</th>
+                                <th>Tên Loại</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <!-- Modal add-->
+            <div class="modal fade" id="modalLoaiMonAdd" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="loai-hinh-title" id="modalLoaiMonLabelAdd">Thêm mới loại món</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="formLoaiMonAdd">
+                                <div class="form-group">
+                                    <label for="tenLoaiInput" class="editor-label">Loại món :<span class="red-text"> *</span></label>
+                                    <input class="form-control" id="tenLoaiAdd" required />
+                                    <label class="text-danger" id="tenLoai_warning"></label>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" id="btnAdd" onclick="LoaiMonAdd();" class="btn btn-submit-form btn-success">Lưu</button>
+                                    <button type="button" id="btnAddNew" onclick="LoaiMonAddNew();" class="btn btn-primary text-white">Lưu và thêm mới</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal edit-->
+            <div class="modal fade" id="modalLoaiMonEdit" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="loai-hinh-title" id="modalLoaiMonLabelEdit">Chỉnh sửa loại món</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="formLoaiMonEdit">
+                                <input type="hidden" class="form-control" id="IdLoaiMonEdit">
+                                <div class="form-group">
+                                    <label for="loaiNhacCuInput" class="editor-label">Loại món :<span class="red-text"> *</span></label>
+                                    <input class="form-control" id="loaiMonInputEdit" required />
+                                    <label class="text-danger" id="loaiNhacCu_warningEdit"></label>
+                                </div>
+                               
+                                <div class="modal-footer">
+                                    <button type="button" id="btnUpdate" onclick="Update();" class="btn btn-submit-form btn-success">Lưu</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--modal delete-->
+            <div class="modal fade" id="modalLoaiMonDelete" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="icon-delete">
+                                <img src="~/desktopmodules/mvc/DNNModule1/css/remove.svg" alt="Girl in a jacket" width="60" height="60">
+                            </div>
+                            <form role="form" id="formTheLoaiDelete" class="bottom-content-delete">
+                                <input type="hidden" class="form-control" id="IdLoaiMonDelete">
+                                <div class="form-group">
+                                    Bạn có chắc chắn muốn xóa loại món?
+                                </div>
+                                <label id="tenLoaiDel" class="nameDelete"></label>
+                                <div>
+                                    <button type="button" onclick="Delete();" class="btn btn-primary text-white">Đồng ý</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--modal delete multiple-->
+            <div class="modal fade in" id="modalLoaiMonDelAll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="icon-delete">
+                                <img src="~/desktopmodules/mvc/DNNModule1/css/remove.svg" alt="Girl in a jacket" width="60" height="60">
+                            </div>
+                            <form role="form" class="bottom-content-delete">
+                                <div class="form-group">
+                                    Bạn có chắc chắn muốn xóa loại món đã chọn?
+                                </div>
+                                <div>
+                                    <button type="button" id="btnXoaAllSelect" class="btn btn-primary text-white">Đồng ý</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var url = window.location;
+    var APIURL = url.protocol + "//" + url.hostname + url.port;
+    //timkiem
+    function timKiem() {
+        var tuKhoa = $('#tu-khoa-text-box-menu').val();
+        $('#dataGridLoaiMon').DataTable()
+            .search(tuKhoa).draw();
+    }
+    //end
+    $(document).ready(function () {
+
+        var table = $('#dataGridLoaiMon').dataTable({
+            "autoWidth": false,
+            "ordering": false,
+            "bInfo": false,
+            "bLengthChange": false,
+            "filter": true,
+            "language": {
+                "sProcessing": "Đang xử lý...",
+                "sLengthMenu": "Hiện: _MENU_",
+                "sZeroRecords": "Không có dữ liệu",
+                "sEmptyTable": "Bảng trống",
+                "sInfo": "Hiện dòng _START_ đến _END_ trong tổng _TOTAL_ dòng",
+                "sInfoEmpty": "Hiện dòng 0 đến 0 trong tổng 0 dòng",
+                //"sInfoPostFix": "Tìm kiếm...",
+                "sSearch": "Tìm kiếm",
+                "sLoadingRecords": "Đang tải...",
+                paginate: {
+                    next: '<i class="fas fa-chevron-right paging-chevron">',
+                    previous: '<i class="fas fa-chevron-left paging-chevron">'
+                }
+            },
+            "ajax": {
+                url: APIURL + "/api/DNNModule1/LoaiMonApi/Gets",
+                type: "GET",
+                dataSrc: function (data) {
+                    console.log(data)
+                    for (let i = 0; i < data.length; i++) {
+                        data[i].stt = i + 1;
+                    }
+                    return data;
+                },
+            },
+            columnDefs: [
+                {
+                    'targets': 0,
+                    'checkboxes': {
+                        'selectRow': true
+                    }
+                },
+                {
+                    targets: [2],
+                    render: function (data, type, row, meta) {
+                        return '<div class="hidden-long-text-4-line"> ' + data + '</div>';
+                    }
+                },
+                {
+                    targets: 3,
+                    render: function (data, type, row, meta) {
+                        return '<i class="fas fa-edit edit-LoaiMon blue-text command-icon" id=n-"' + meta.row + '"></i><i class="far fa-trash-alt delete-LoaiMon red-text command-icon" id=n-"' + meta.row + '"></i>';
+                    }
+
+                }
+            ],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [[1, 'asc']],
+            "columns": [
+                { data: "maloai", "width": "30px", "class": "stt-text center-align not-export-col" },
+                { data: "stt", "width": "50px", "class": "stt-text center-align" },
+                { data: "tenloai", "class": "left-align" },
+               
+            ]
+        });
+        $('#dataGridLoaiMon tbody').on('click', '.delete-LoaiMon', function () {
+            var id = $(this).attr("id").match(/\d+/)[0];
+            var data = $('#dataGridLoaiMon').DataTable().row(id).data();
+            $('#IdLoaiMonDelete').val(data.maloai);
+            $('#tenLoaiDel').text(data.tenloai);
+            $('#modal-btn-delete').click();
+        });
+        $('#dataGridLoaiMon tbody').on('click', '.edit-LoaiMon', function () {
+            var id = $(this).attr("id").match(/\d+/)[0];
+            var data = $('#dataGridLoaiMon').DataTable().row(id).data();
+            let idLoaiMon = data.maloai;
+            $.ajax({
+                async: false,
+                type: 'get',
+                url: APIURL + '/api/DNNModule1/LoaiMonApi/GetById/?MaLoai=' + idLoaiMon,
+                success: function (data) {
+                    $('#IdLoaiMonEdit').val(data.maloai);
+                    $('#loaiMonInputEdit').val(data.tenloai);
+                   
+                },
+                error: function (err) {
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                }
+            });
+            $('#modal-btn-edit').click();
+        });
+        //del mutiple
+        $('#btnXoaAll').on('click', function (e) {
+            console.log(table.api().column(0));
+            var rows_selected = table.api().column(0).checkboxes.selected();
+            var form = this;
+            $.each(rows_selected, function (index, rowId) {
+                // Create a hidden element
+                $(form).append(
+                    $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'id[]')
+                        .val(rowId)
+                );
+            });
+            let idLoaiMon = rows_selected.join(",");
+            if (idLoaiMon == null || idLoaiMon == '') {
+                alert('Vui lòng chọn loại món muốn xóa!');
+            }
+            else {
+                $('#modalLoaiMonDelAll').modal('show');
+                $('#btnXoaAllSelect').on('click', function (e) {
+                    $.ajax({
+                        type: 'delete',
+                        async: false,
+                        url: APIURL + '/api/DNNModule1/LoaiMonApi/DeleteMutiple/?lstMaLoai=' + idLoaiMon,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        success: function (data) {
+                            alert("Xóa loại mónthành công!");
+                            $('#modalLoaiMonDelAll').modal('toggle');
+                            location.reload();
+                        },
+                        error: function (err) {
+                            alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                        }
+                    });
+                });
+            }
+        })
+        $('#modalLoaiMonAdd').on('hidden.bs.modal', function () {
+            $('#tenLoaiAdd').val("");
+            $('#moTaAdd').val("");
+            $('#tenLoai_warning').text("");
+        });
+        $('#modalLoaiMonEdit').on('hidden.bs.modal', function () {
+            $('#loaiNhacCu_warningEdit').text("");
+        });
+    });
+    
+    //add
+    function LoaiMonAdd() {
+        var loaimon = $('#tenLoaiAdd').val();
+        
+        const dataForm = {
+            "maloai": 0,
+            "tenloai": loaimon,
+          
+        };
+        if (loaimon.trim() == "") {
+            alert("Vui lòng điền đầy đủ thông tin!")
+        }
+        else {
+            $.ajax({
+                async: false,
+                type: 'post',
+                url: APIURL + '/api/DNNModule1/LoaiMonApi/Insert',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify(dataForm),
+                dataType: "json",
+                success: function (data) {
+                    alert("Thêm mới loại mónthành công!")
+                    $('#modalLoaiMonAdd').modal('toggle');
+                    $('#dataGridLoaiMon').DataTable().ajax.reload();
+                },
+                error: function (err) {
+                    alert('Lỗi.');
+                }
+            });
+        }
+    }
+    //save and add new
+    function LoaiMonAddNew() {
+        var loaimon = $('#tenLoaiAdd').val();
+       
+        const dataForm = {
+            "maloai": 0,
+            "tenloai": loaimon,
+            
+        };
+        if (loaimon.trim() == "") {
+            alert("Vui lòng điền đầy đủ thông tin!")
+        }
+        else {
+            $.ajax({
+                async: false,
+                type: 'post',
+                url: APIURL + '/api/DNNModule1/LoaiMonApi/Insert',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify(dataForm),
+                dataType: "json",
+                success: function (data) {
+                    alert("Thêm mới loại mónthành công!")
+                    $('#tenLoaiAdd').val("");
+                  
+                    $('#dataGridLoaiMon').DataTable().ajax.reload();
+                },
+                error: function (err) {
+                    alert('Lỗi.');
+                }
+            });
+        }
+    }
+    //update
+    function Update() {
+        var tenLoai = $('#loaiMonInputEdit').val();
+        var maLoai = $('#IdLoaiMonEdit').val();
+       
+        const dataForm = {
+            "maloai": maLoai,
+            "tenloai": tenLoai
+        };
+        console.log(dataForm)
+        if (tenLoai.trim() == "") {
+            alert("Vui lòng điền đầy đủ thông tin!")
+        }
+        else {
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: APIURL + '/api/DNNModule1/LoaiMonApi/Update',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify(dataForm),
+                dataType: "json",
+                success: function (data) {
+                    alert("Cập nhật loại mónthành công!");
+                    $('#modalLoaiMonEdit').modal('toggle');
+                    $('#dataGridLoaiMon').DataTable().ajax.reload();
+                },
+                error: function (err) {
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                }
+            });
+        }
+    }
+    //delete
+    function Delete() {
+        var id = $('#IdLoaiMonDelete').val();
+        $.ajax({
+            type: 'delete',
+            async: false,
+            url: APIURL + '/api/DNNModule1/LoaiMonApi/Delete/?MaLoai=' + id,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            success: function (data) {
+                alert("Xóa loại món thành công!");
+                $('#modalLoaiMonDelete').modal('toggle');
+                $('#dataGridLoaiMon').DataTable().ajax.reload();
+            },
+            error: function (err) {
+                alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+            }
+        });
+    }
+    function preventMultipleSubmissions() {
+        $('#btnAdd').prop('disabled', true);
+        $('#btnAddNew').prop('disabled', true);
+        $('#btnUpdate').prop('disabled', true);
+    }
+</script>
+

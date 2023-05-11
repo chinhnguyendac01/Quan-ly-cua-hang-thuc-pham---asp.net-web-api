@@ -1,0 +1,1162 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/DesktopModules/MVC/DNNModule1/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .modal-backdrop {
+        display: none;
+    }
+
+    .modal {
+        /* bug fix - custom overlay */
+        background-color: rgba(10,10,10,0.45);
+    }
+    .container{
+        max-width:1600px;
+    }
+</style>
+<div>
+    <h3 class="admin-page-content-title header-style">MonAn</h3>
+    <div class="tab-content admin-content-wrapper">
+        <div class="container-fluid container-fluid-second">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="search-group-table-item search-group-table-item-n-btn form-group has-search">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input class="form-control" placeholder="Từ khóa" id="tu-khoa-text-box-menu" oninput="timKiem();" type="text" />
+                    </div>
+                </div>
+                <div class="col-6" style="text-align:right;margin-bottom:1rem">
+                    <div class="col-sm-6">
+                        <label for="maLoaiInput" class="editor-label">Loại Món Ăn:</label>
+                        <select class="form-control" id="LoaiMonAnSelectfilter" required row></select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="maLoaiInput" class="editor-label">Nhà Cung Cap:</label>
+                        <select class="form-control" id="NhaCungCapSelectfilter" required row></select>
+                    </div>
+                    <button type="button" class="btn btn-success btn-style_themmoi" data-toggle="modal" data-target="#modalMonAnAdd">
+                        <span>Thêm mới</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-style_xoa" id="btnXoaAll">
+                        <span>Xóa</span>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-style_xoa" id="btnSapXepGia">
+                        
+                    </button>
+                    <button type="button" class="btn btn-danger btn-style_xoa" id="btnSapXepNgay">
+                        
+                    </button>
+                    <!-- Button trigger modal -->
+                    <button id="modal-btn-detail" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalMonAnDetail" style="display: none">
+                        Hiển thị chi tiết
+                    </button>
+                    <button id="modal-btn-edit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalMonAnEdit" style="display: none">
+                        Cập nhật nhạc cụ
+                    </button>
+                    <button id="modal-btn-delete" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalMonAnDelete" style="display: none">
+                        Xóa nhạc cụ
+                    </button>
+                </div>
+            </div>
+            <div class="table-tree-wrapper">
+                <div style="width:100%; margin:0 auto;" id="hidden-table">
+                    <table id="dataGridMonAn" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th style="text-align:center">Stt</th>
+                                <th style="text-align:center">Tên Món </th>
+                                <th style="text-align:center">Loại Món</th>
+                                <th style="text-align:center">Số lượng</th>
+                                <th style="text-align:center">Giá</th>
+                                <th style="text-align:center">Thành phần</th>
+                                <th style="text-align:center">Tên nhà cung cấp</th>
+                                <th style="text-align:center">Ngày nhập</th>
+                                <th style="text-align:center">Ảnh</th>
+                                <th style="text-align:center">Thao tác</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <!--Modal detail-->
+
+            <div class="modal fade" id="modalMonAnDetail" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="loai-hinh-title" id="modalMonAnLabelDetail">Thông tin Món Ăn</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="formMonAnDetail">
+                                <input type="hidden" class="form-control" id="IdMonAnDetail">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="MonAnInput" class="editor-label">Tên Món Ăn:</label>
+                                        <textbox class="form-control" id="TenMonAnDetail" row></textbox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="tenLoaiInput" class="editor-label">Loại Món Ăn:</label>
+                                        <textbox id="LoaiMonDetail" class="form-control" row></textbox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="tenLoaiInput" class="editor-label">Nhà Cung Cấp:</label>
+                                        <textbox id="NhaCungCapDetail" class="form-control" row></textbox>
+                                    </div>
+                                </div>
+                                <div id="PathImg" @*style="width:200px;"*@ style="margin:10px 0px 10px 0px"></div>
+
+                                <div class="form-group">
+                                    <label for="SoLuongInput" class="editor-label">Số Lượng:</label>
+                                    <input id="SoLuongDetail" class="form-control" rows="3" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="GiaInput" class="editor-label">Giá:</label>
+                                    <input id="GiaDetail" class="form-control" rows="3" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="ThanhPhanInput" class="editor-label">Thành phần:</label>
+                                    <textarea id="ThanhPhanDetail" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div>
+                                    <label for="TitleDetail" class="editor-label">Ảnh</label>
+                                    <textarea id="TitleDetail" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal add-->
+           
+            <div class="modal fade" id="modalMonAnAdd" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="loai-hinh-title" id="modalMonAnLabelAdd">Thêm mới Món Ăn</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="formMonAnAdd">
+                                <!--addAnh-->
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="tenInput" class="editor-label">Món Ăn:<span class="red-text"> *</span></label>
+                                        <input class="form-control" id="TenMonAdd" required onKeyUp="KiemTra();" row />
+                                        <label class="text-danger" id="ten_warning"></label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="maLoaiInput" class="editor-label">Loại Món Ăn:</label>
+                                        <select class="form-control" id="loaiMonAnSelect" required row></select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="maLoaiInput" class="editor-label">Nhà Cung Cấp:</label>
+                                        <select class="form-control" id="NhaCungCapSelect" required row></select>
+                                    </div>
+                                </div>
+                                <div>
+                                    @*<label for="TitleInput" class="editor-label">Ten anh</label>
+                                <textarea id="TitleAdd" class="form-control"></textarea>*@
+                                    <label for="hinhAnhInput" class="editor-label">Ảnh:<span class="red-text"> *</span></label>
+                                    <input id="AnhMonAnAdd" class="form-control" type="file" multiple accept=".jpg, .png, .jpeg, .bmp, .gif, .webp, .jfif" />
+                                    @*<button class="btn btn-submit-form btn-success" type="button" id="btnAddIntoFolder" onclick="Upload();">Upload</button>*@
+                                </div>
+                                @*<div class="form-group">
+
+                                <textarea id="maLoaiAdd" class="form-control" rows="3"></textarea>
+                            </div>*@
+
+                                <div class="form-group">
+                                    <label for="SoLuongInput" class="editor-label">Số Lượng:</label>
+                                    <input id="SoLuongAdd" class="form-control" rows="3"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="GiaInput" class="editor-label">Gía:</label>
+                                    <input id="GiaAdd" class="form-control" rows="3"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ThanhPhanInput" class="editor-label">Thành Phần:</label>
+                                    <textarea id="ThanhPhanAdd" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="btnAdd" onclick="MonAnAdd();" class="btn btn-submit-form btn-success">Lưu</button>
+                                    <button type="button" id="btnAddNew" onclick="MonAnAddNew();" class="btn btn-primary text-white">Lưu và thêm mới</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal edit-->
+
+            <div class="modal fade" id="modalMonAnEdit" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="loai-hinh-title" id="modalMonAnLabelEdit">Chỉnh sửa Món Ăn</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="formMonAnEdit">
+                                <input type="hidden" class="form-control" id="IdMonAnEdit">
+                                <input type="hidden" class="form-control" id="MaAnhEdit">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="MonAnInput" class="editor-label">Tên Món ăn:<span class="red-text"> *</span></label>
+                                        <input class="form-control" id="TenMonAnEdit" required @*onKeyUp="KiemTra();"*@ row />
+                                        <label class="text-danger" id="MonAn_warningEdit"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maLoaiInput" class="editor-label">Loại Món ăn:</label>
+                                        <select class="form-control" id="loaiMonAnSelectEdit" required row></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maLoaiInput" class="editor-label">Nhà Cung Cấp:</label>
+                                        <select class="form-control" id="NhaCungCapSelectEdit" required row></select>
+                                    </div>
+                                </div>
+                                <div id="PathImgEdit" style="margin:0px 0px 10px 0px"></div>
+                                <div class="form-group">
+                                    <label for="hinhAnhInput" class="editor-label">Ảnh:<span class="red-text"> *</span></label>
+                                    <input id="anhMonAnEdit" type="file" multiple accept=".jpg, .png, .jpeg, .bmp, .gif, .webp, .jfif" />
+                                </div>
+                                @*<div class="form-group">
+                                <label for="maLoaiInput" class="editor-label">Loại nhạc cụ:</label>
+                                <textarea id="maLoaiEdit" class="form-control" rows="3"></textarea>
+                            </div>*@
+
+                                <div class="form-group">
+                                    <label for="SoLuongInput" class="editor-label">Số Lượng:</label>
+                                    <input type="number" id="SoLuongEdit" class="form-control" rows="3"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="GiaInput" class="editor-label">Giá :</label>
+                                    <input type="number" id="GiaEdit" class="form-control" rows="3"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ThanhPhanInput" class="editor-label">Thành Phần:</label>
+                                    <textarea id="ThanhPhanEdit" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="TitleInput" class="editor-label">Ảnh</label>
+                                    <textarea id="TitleEdit" class="form-control"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="btnUpdate" onclick="Update();" class="btn btn-submit-form btn-success">Lưu</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--modal delete-->
+            <div class="modal fade" id="modalMonAnDelete" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="icon-delete">
+                                <img src="~/desktopmodules/mvc/DNNModule1/css/remove.svg" alt="Girl in a jacket" width="60" height="60">
+                            </div>
+                            <form role="form" id="formTheLoaiDelete" class="bottom-content-delete">
+                                <input type="hidden" class="form-control" id="IdMonAnDelete">
+                                <div class="form-group">
+                                    Bạn có chắc chắn muốn xóa nhạc cụ?
+                                </div>
+                                <label id="tenmonDel" class="nameDelete"></label>
+                                <div>
+                                    <button type="button" onclick="Delete();" class="btn btn-primary text-white">Đồng ý</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--modal delete multiple-->
+            <div class="modal fade in" id="modalMonAnDelAll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="icon-delete">
+                                <img src="~/desktopmodules/mvc/DNNModule1/css/remove.svg" alt="Girl in a jacket" width="60" height="60">
+                            </div>
+                            <form role="form" class="bottom-content-delete">
+                                <div class="form-group">
+                                    Bạn có chắc chắn muốn xóa nhạc cụ đã chọn?
+                                </div>
+                                <div>
+                                    <button type="button" id="btnXoaAllSelect" class="btn btn-primary text-white">Đồng ý</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    var FileId = "";
+    var urlMonAn = "";
+    var filenameMonAn = "";
+    var url = window.location;
+    var APIURL = url.protocol + "//" + url.hostname + url.port;
+    var TenLoaiMon = '';
+    var TenLienHe = '';
+    var MaLoai = '';
+    var MaCungCap = '';
+    var maAnhEditDB = "";
+    //timkiem
+    function timKiem() {
+        var tuKhoa = $('#tu-khoa-text-box-menu').val();
+        $('#dataGridMonAn').DataTable()
+            .search(tuKhoa).draw();
+    }
+    //end
+    let toogle1 = false
+    $("#btnSapXepGia").html("<span>Giá thấp</span>")
+    $("#btnSapXepGia").on("click", function () {
+        var MaLoai = $('#LoaiMonAnSelectfilter option:selected').val();
+        var MaNhaCungCap = $('#NhaCungCapSelectfilter option:selected').val();
+        
+        toogle1 = !toogle1
+        if (toogle1 == true) {
+            $("#btnSapXepGia").html("<span>Giá thấp</span>")
+            $('#dataGridMonAn').DataTable().ajax.url(APIURL + "/api/DNNModule1/MonAnApi/Sort?SortExpr=Gia&SortDir=Desc&MaLoai=" + MaLoai + "&CungCap=" + MaNhaCungCap).load();
+        } else if (toogle1 == false) {
+            $("#btnSapXepGia").html("<span>Giá cao</span>")
+            $('#dataGridMonAn').DataTable().ajax.url(APIURL + "/api/DNNModule1/MonAnApi/Sort?SortExpr=Gia&SortDir=ASC&MaLoai=" + MaLoai + "&CungCap=" + MaNhaCungCap).load();
+        }
+    })
+    let toogle2 = false
+    $("#btnSapXepNgay").html("<span>Ngày cũ</span>")
+    $("#btnSapXepNgay").on("click", function () {
+        var MaLoai = $('#LoaiMonAnSelectfilter option:selected').val();
+        var MaNhaCungCap = $('#NhaCungCapSelectfilter option:selected').val();
+   
+        toogle2 = !toogle2
+        if (toogle2 == true) {
+            $("#btnSapXepNgay").html("<span>Ngày cũ</span>")
+            $('#dataGridMonAn').DataTable().ajax.url(APIURL + "/api/DNNModule1/MonAnApi/Sort?SortExpr=NgayNhap&SortDir=Desc&MaLoai=" + MaLoai + "&CungCap=" + MaNhaCungCap).load();
+        } else if (toogle1 == false) {
+            $("#btnSapXepNgay").html("<span>Ngày mới</span>")
+            $('#dataGridMonAn').DataTable().ajax.url(APIURL + "/api/DNNModule1/MonAnApi/Sort?SortExpr=NgayNgap&SortDir=ASC&MaLoai=" + MaLoai + "&CungCap=" + MaNhaCungCap).load();
+        }
+    })
+    $.ajax({
+        type: 'get',
+        url: APIURL + '/api/DNNModule1/LoaiMonApi/Gets',
+        success: function (data) {
+
+            $(`#LoaiMonAnSelectfilter`).empty();
+            $('#LoaiMonAnSelectfilter').append(`<option value=${0}>${"--Chọn--"}</option>`)
+            data.forEach(element => {
+                $('#LoaiMonAnSelectfilter').append(`<option value=${element.maloai}>${element.tenloai}</option>`)
+            });
+        },
+        error: function (err) {
+            alert('Lỗi load dữ liệu, vui lòng thử lại sauuu!');
+        }
+    });
+
+    var MaLoai = localStorage.getItem('MaLoai');
+    var MaNhaCungCap = localStorage.getItem('MaNhaCungCap');
+    if (MaLoai && MaNhaCungCap) {
+        $('#LoaiMonAnSelectfilter').val(MaLoai);
+        $('#NhaCungCapSelectfilter').val(MaNhaCungCap);
+    }
+
+
+    $(`#LoaiMonAnSelectfilter`).on("change", function () {
+
+        var MaLoai = $('#LoaiMonAnSelectfilter option:selected').val();
+        var MaNhaCungCap = $('#NhaCungCapSelectfilter option:selected').val();
+        localStorage.setItem('MaNhaCungCap', MaNhaCungCap);
+        localStorage.setItem('MaLoai', MaLoai);
+
+        $('#dataGridMonAn').DataTable().ajax.url(APIURL + "/api/DNNModule1/MonAnApi/Sort?SortExpr=&SortDir=&MaLoai=" + MaLoai + "&CungCap=" + MaNhaCungCap).load();
+    })
+
+    $(`#NhaCungCapSelectfilter`).on("change", function () {
+        var MaLoai = $('#LoaiMonAnSelectfilter option:selected').val();
+        var MaNhaCungCap = $('#NhaCungCapSelectfilter option:selected').val();
+        localStorage.setItem('MaNhaCungCap', MaNhaCungCap);
+        localStorage.setItem('MaLoai', MaLoai);
+        $('#dataGridMonAn').DataTable().ajax.url(APIURL + "/api/DNNModule1/MonAnApi/Sort?SortExpr=&SortDir=&MaLoai=" + MaLoai + "&CungCap=" + MaNhaCungCap).load();
+    })
+    $.ajax({
+        type: 'get',
+        url: APIURL + '/api/DNNModule1/CungCapApi/Gets',
+        success: function (data) {
+            $(`#NhaCungCapSelectfilter`).empty();
+            $('#NhaCungCapSelectfilter').append(`<option value=${0}>${"--Chọn--"}</option>`)
+            data.forEach(element => {
+                $('#NhaCungCapSelectfilter').append(`<option value=${element.CungCapID}>${element.TenLienHe}</option>`)
+            });
+        },
+        error: function (err) {
+            alert('Lỗi load dữ liệu, vui lòng thử lại sauuu!');
+        }
+    });
+    $(document).ready(function () {
+    
+
+        var table = $('#dataGridMonAn').dataTable({
+            "autoWidth": false,
+            "ordering": false,
+            "bInfo": false,
+            "bLengthChange": false,
+            "filter": true,
+            "language": {
+                "sProcessing": "Đang xử lý...",
+                "sLengthMenu": "Hiện: _MENU_",
+                "sZeroRecords": "Không có dữ liệu",
+                "sEmptyTable": "Bảng trống",
+                "sInfo": "Hiện dòng _START_ đến _END_ trong tổng _TOTAL_ dòng",
+                "sInfoEmpty": "Hiện dòng 0 đến 0 trong tổng 0 dòng",
+                //"sInfoPostFix": "Tìm kiếm...",
+                "sSearch": "Tìm kiếm",
+                "sLoadingRecords": "Đang tải...",
+                paginate: {
+                    next: '<i class="fas fa-chevron-right paging-chevron">',
+                    previous: '<i class="fas fa-chevron-left paging-chevron">'
+                }
+            },
+            "ajax": {
+                url: APIURL + "/api/DNNModule1/MonAnApi/Gets",
+                type: "GET",
+                dataSrc: function (data) {
+                   
+                    for (let i = 0; i < data.length; i++) {
+                        data[i].stt = i + 1;
+                        const date = new Date(data[i].Ngaynhap);
+                        const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+                        data[i].Ngaynhap = formattedDate;
+                    
+                    }
+                    
+                    return data;
+                },
+                
+            },
+            columnDefs: [
+                {
+                    'targets': 0,
+                    'checkboxes': {
+                        'selectRow': true
+                    }
+                },
+                {
+                    targets: [4, 5, 6],
+                    render: function (data, type, row, meta) {
+                        return '<div class="hidden-long-text-4-line"> ' + data + '</div>';
+                    }
+                },
+                {
+                    targets: 10,
+                    render: function (data, type, row, meta) {
+                        
+                        return '<i class="fas fa-solid fa-eye green-text command-icon" id=n-"' + meta.row + '"></i><i class="fas fa-edit edit-MonAn blue-text command-icon" id=n-"' + meta.row + '"></i><i class="far fa-trash-alt delete-MonAn red-text command-icon" id=n-"' + meta.row + '"></i>';
+                    }
+
+                }
+            ],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [[1, 'asc']],
+            "columns": [
+                { data: "mamon", "width": "30px", "class": "stt-text center-align not-export-col" },
+                { data: "stt", "width": "25px", "class": "stt-text center-align" },
+                { data: "tenmon", "class": "center-align" },
+                { data: "tenloai", "class": "center-align" },
+                { data: "soluong", "class": "center-align" },
+                {
+                    data: "gia", class: "center-align", render: function (data, type, row, meta) {
+                        return '<strong style="color: #d0021c;">' + data +'₫<strong/>';
+                    }
+                },
+                { data: "thanhphan", "class": "center-align" },
+                { data: "TenLienHe", "class": "center-align" },
+                { data: "Ngaynhap", "class": "center-align" },
+                {
+                    data: "Path",
+                    class: "center-align",
+                    render: function (data, type, row, meta) {
+                        return '<img src="' + data + '"  width="150px"/>';
+                    }
+                }
+                @*{ "data": "mamon", "class": "center-align not-export-col", "width": "110px" },*@
+            ]
+        });
+
+        //button delete
+        $('#dataGridMonAn tbody').on('click', '.delete-MonAn', function () {
+            var id = $(this).attr("id").match(/\d+/)[0];
+            var data = $('#dataGridMonAn').DataTable().row(id).data();
+          
+            $('#IdMonAnDelete').val(data.mamon);
+            $('#tenmonDel').text(data.tenmon);
+            $('#modal-btn-delete').click();
+        });
+        //button edit
+        $('#dataGridMonAn tbody').on('click', '.edit-MonAn', function () {
+            var id = $(this).attr("id").match(/\d+/)[0];
+            var data = $('#dataGridMonAn').DataTable().row(id).data();
+            let MaMonAn = data.mamon;
+
+            $.ajax({
+                async: false,
+                type: 'get',
+                url: APIURL + '/api/DNNModule1/MonAnApi/GetById?MaMonAn=' + MaMonAn,
+                success: function (data) {
+                    $('#IdMonAnEdit').val(data.mamon);                  
+                    $('#TenMonAnEdit').val(data.tenmon);
+                    //$('#PathImgEdit').attr("src", data.Path);
+                    //$('#maLoaiEdit').val(data.TenLoai);
+                    $('#MaAnhEdit').val(data.MaAnh);
+                    $('#SoLuongEdit').val(data.soluong);
+                    $('#GiaEdit').val(data.gia);
+                    $('#ThanhPhanEdit').val(data.thanhphan);
+                    TenLoaiMon = data.tenloai;
+                    TenLienHe = data.TenLienHe;
+                    MaLoai = data.maloai;
+                    MaCungCap = data.IDCungcap;
+                    maAnhEditDB = data.MaAnh;
+                    $('#PathImgEdit').empty();
+                    //load multi img
+                    
+                    const myArrayPathEdit = data.Path.split(",");
+                    myArrayPathEdit.forEach(element => {
+                        if (element != "") {
+                            $('#PathImgEdit').append('<img src="' + element + '" width="240"/>');
+                        }
+
+                    });
+                },
+                error: function (err) {
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sauuuuu!');
+                }
+            });
+            SelectEdit();
+            $('#modal-btn-edit').click();
+        });
+        //button detail
+        $('#dataGridMonAn tbody').on('click', '.fa-eye', function () {
+            var id = $(this).attr("id").match(/\d+/)[0];
+            var data = $('#dataGridMonAn').DataTable().row(id).data();
+            let MaMonAn = data.mamon;
+           
+            $.ajax({
+                async: false,
+                type: 'get',
+                url: APIURL + '/api/DNNModule1/MonAnApi/GetById/?MaMonAn=' + MaMonAn,
+                success: function (data) {
+                    $('#IdMonAnDetail').text(data.mamon);
+                    //$("#MaAnhDetail").text(data.MaAnh);
+                    $('#TenMonAnDetail').text(data.tenmon);
+                    $('#LoaiMonDetail').text(data.tenloai);
+                    $('#NhaCungCapDetail').text(data.TenLienHe);
+                    $('#SoLuongDetail').val(data.soluong);
+                    $('#GiaDetail').val(data.gia);
+                    $('#ThanhPhanDetail').text(data.thanhphan);
+                    
+                    $('#PathImg').empty();
+                    $('#TitleDetail').text(data.Title);
+
+                    const myArrayPath = data.Path.split(",");
+                    myArrayPath.forEach(element => {
+                        if (element != "") {
+                            $('#PathImg').append('<img src="' + element + '" width="240"/>');
+                        }
+                    });
+
+                },
+                error: function (err) {
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                }
+            });
+            $('#modal-btn-detail').click();
+        });
+        //del mutiple
+        $('#btnXoaAll').on('click', function (e) {
+            var rows_selected = table.api().column(0).checkboxes.selected();
+            var form = this;
+          
+            $.each(rows_selected, function (index, rowId) {
+                // Create a hidden element
+              
+                $(form).append(
+                    $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'id[]')
+                        .val(rowId)
+                );
+            });
+            let idMonAn = rows_selected.join(",");
+            if (idMonAn == null || idMonAn == '') {
+                alert('Vui lòng chọn Món Ăn muốn xóa!');
+            }
+            else {
+                $('#modalMonAnDelAll').modal('show');
+                $('#btnXoaAllSelect').on('click', function (e) {
+                    $.ajax({
+                        type: 'delete',
+                        async: false,
+                        url: APIURL + '/api/DNNModule1/MonAnApi/DeleteMutiple/?lstMaMon=' + idMonAn,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        success: function (data) {
+                            alert("Xóa Món Ăn thành công!");
+                            $('#modalMonAnDelAll').modal('toggle');
+                            location.reload();
+                        },
+                        error: function (err) {
+                            alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                        }
+                    });
+                });
+            }
+        })
+        $('#modalMonAnAdd').on('hidden.bs.modal', function () {
+            $('#TenMonAdd').val("");
+            $('#AnhMonAnAdd').val("");
+            $('#SoLuongAdd').val("");
+            $('#GiaAdd').val("");
+            $('#ThanhPhanAdd').val("");
+            $('#loaiMonAnSelect').val("0").trigger("change");
+            $('#ten_warning').text("");
+        });
+        $('#modalMonAnEdit').on('hidden.bs.modal', function () {
+            $('#MonAn_warningEdit').text("");
+        });
+        //select Loại nhạc cụ
+        $('#loaiMonAnSelect').select2({
+            width: 350,
+            language: "vi"
+        });
+        $.ajax({
+            type: 'get',
+            url: APIURL + '/api/DNNModule1/LoaiMonApi/Gets',
+            success: function (data) {
+                $(`#loaiMonAnSelect`).empty();
+                $('#loaiMonAnSelect').append(`<option value=${0}>${"--Chọn--"}</option>`)
+                data.forEach(element => {
+                    $('#loaiMonAnSelect').append(`<option value=${element.maloai}>${element.tenloai}</option>`)
+                });
+            },
+            error: function (err) {
+                alert('Lỗi load dữ liệu, vui lòng thử lại sauuu!');
+            }
+        });
+        $.ajax({
+            type: 'get',
+            url: APIURL + '/api/DNNModule1/CungCapApi/Gets',
+            success: function (data) {
+                
+                $(`#NhaCungCapSelect`).empty();
+                $('#NhaCungCapSelect').append(`<option value=${0}>${"--Chọn--"}</option>`)
+                data.forEach(element => {
+                    $('#NhaCungCapSelect').append(`<option value=${element.CungCapID}>${element.TenLienHe}</option>`)
+                });
+            },
+            error: function (err) {
+                alert('Lỗi load dữ liệu, vui lòng thử lại sauuu!');
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+        var MaLoai = localStorage.getItem('MaLoai');
+        var MaNhaCungCap = localStorage.getItem('MaNhaCungCap');
+        
+        if (MaLoai && MaNhaCungCap) 
+            {
+                $('#LoaiMonAnSelectfilter ').val(MaLoai);
+                $('#NhaCungCapSelectfilter').val(MaNhaCungCap);
+            }
+        $('#dataGridMonAn').DataTable().ajax.url(APIURL + "/api/DNNModule1/MonAnApi/Sort?SortExpr=NgayNhap&SortDir=&MaLoai=" + MaLoai + "&CungCap=" + MaNhaCungCap).load();
+        
+    });
+        
+    //select LoaiMonAn cua Edit
+    function SelectEdit() {
+        $('#loaiMonAnSelectEdit').select2({
+            width: 350,
+            language: "vi"
+        });
+        $.ajax({
+            type: 'get',
+            url: APIURL + '/api/DNNModule1/LoaiMonApi/GetsByName?TenLoai=' + TenLoaiMon,
+            success: function (data) {
+                $(`#loaiMonAnSelectEdit`).empty();
+                $('#loaiMonAnSelectEdit').append(`<option value=${MaLoai}>${TenLoaiMon}</option>`)
+                data.forEach(element => {
+                    $('#loaiMonAnSelectEdit').append(`<option value=${element.maloai}>${element.tenloai}    </option>`)
+                });
+            },
+            error: function (err) {
+                alert('Lỗi load dữ liệu, vui lòng thử lại sauaa!');
+            }
+        });
+        $.ajax({
+            type: 'get',
+            url: APIURL + '/api/DNNModule1/CungCapApi/GetsByName?TenLienHe=' + TenLienHe,
+            success: function (data) {
+                $(`#NhaCungCapSelectEdit`).empty();
+                $('#NhaCungCapSelectEdit').append(`<option value=${MaCungCap}>${TenLienHe}</option>`)
+                data.forEach(element => {
+                    $('#NhaCungCapSelectEdit').append(`<option value=${element.CungCapID}>${element.TenLienHe}    </option>`)
+                });
+            },
+            error: function (err) {
+                alert('Lỗi load dữ liệu, vui lòng thử lại sauaa!');
+            }
+        });
+    }
+    //add
+   
+    function MonAnAdd() {
+        var MonAn = $('#TenMonAdd').val();
+        var MaLoai = $('#loaiMonAnSelect').val();
+        var MaCungCap = $('#NhaCungCapSelect').val();
+        var SoLuong = $('#SoLuongAdd').val();
+        var Gia = $('#GiaAdd').val();
+        var ThanhPhan = $('#ThanhPhanAdd').val();
+      
+        Upload();
+        var maAnh = FileId;
+        const dataForm = {
+            "mamon": 0,
+            "tenmon": MonAn,
+            "maloai": MaLoai,
+            "MaAnh": maAnh,
+            "soluong": SoLuong,
+            "gia": Gia,
+            "thanhphan": ThanhPhan,
+            "IDCungcap": MaCungCap
+        };
+        if (maAnh == "") {
+            alert("Vui lòng thêm ảnh cho món ăn!")
+        }
+        else {
+            if (MonAn.trim() == "" || MaLoai.trim() == "" || maAnh.trim() == "" || SoLuong.trim() == "") {
+                alert("Vui lòng điền đầy đủ thông tin!")
+            }
+            else {
+                $.ajax({
+                    async: false,
+                    type: 'post',
+                    url: APIURL + '/api/DNNModule1/MonAnApi/Insert',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(dataForm),
+                    dataType: "json",
+                    success: function (data) {
+                        alert("Thêm mới món ăn thành công!")
+                        $('#modalMonAnAdd').modal('show');
+                        FileId = "";
+                        $('#modalMonAnAdd').modal('toggle');
+                        $('#dataGridMonAn').DataTable().ajax.reload();
+                    },
+                    error: function (err) {
+                        alert('Lỗi.');
+                    }
+                });
+            }
+        }
+
+    }
+    //save and add new
+    function MonAnAdd() {
+        var MonAn = $('#TenMonAdd').val();
+        var MaLoai = $('#loaiMonAnSelect').val();
+        var SoLuong = $('#SoLuongAdd').val();
+        var Gia = $('#GiaAdd').val();
+        var ThanhPhan = $('#ThanhPhanAdd').val();
+        var MaCungCap = $('#NhaCungCapSelect').val();
+        Upload();
+        var maAnh = FileId;
+        const dataForm = {
+            "mamon": 0,
+            "tenmon": MonAn,
+            "maloai": MaLoai,
+            "MaAnh": maAnh,
+            "soluong": SoLuong,
+            "gia": Gia,
+            "thanhphan": ThanhPhan,
+            "IDCungcap": MaCungCap
+        };
+        if (maAnh == "") {
+            alert("Vui lòng thêm ảnh cho món ăn!")
+        }
+        else {
+            if (MonAn.trim() == "") {
+                alert("Vui lòng điền đầy đủ thông tin!")
+            }
+            else {
+                $.ajax({
+                    async: false,
+                    type: 'post',
+                    url: APIURL + '/api/DNNModule1/MonAnApi/Insert',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(dataForm),
+                    dataType: "json",
+                    success: function (data) {
+                        alert("Thêm mới món ăn thành công!")
+                        $('#modalMonAnAdd').modal('show');
+                        $('#TenMonAdd').val("");
+                        $('#AnhMonAnAdd').val("");
+                        $('#SoLuongAdd').val("");
+                        $('#GiaAdd').val("");
+                        $('#ThanhPhanAdd').val("");
+                      
+                        FileId = "";
+                        $('#loaiMonAnSelect').val("0").trigger("change");
+                        $('#dataGridMonAn').DataTable().ajax.reload();
+                    },
+                    error: function (err) {
+                        alert('Lỗi.');
+                    }
+                });
+            }
+        }
+
+    }
+    //update
+    function Update() {
+        var TenMon = $('#TenMonAnEdit').val();
+       
+        var maMonAn = $('#IdMonAnEdit').val();
+        var maLoai = $('#loaiMonAnSelectEdit').val();
+        var MaCungCap = $('#NhaCungCapSelectEdit').val();
+        var SoLuong = $('#SoLuongEdit').val();
+        var Gia = $('#GiaEdit').val();
+        var ThanhPhan = $('#ThanhPhanEdit').val();
+      
+        UploadAnhEdit();
+        var maAnh = FileId;
+        if (maAnh == "") {
+            maAnh = maAnhEditDB;
+          
+        }
+        const dataForm = {
+            "mamon": maMonAn,
+            "tenmon": TenMon,
+            "maloai": maLoai,
+            "soluong": SoLuong,
+            "gia": Gia,
+            "thanhphan": ThanhPhan,
+            "MaAnh": maAnh,
+            "IDCungcap": MaCungCap
+        };
+        if (maAnh == "") {
+            alert("Vui lòng thêm ảnh cho Món Ăn!")
+        }
+        else {
+            if (TenMon.trim() == "") {
+                alert("Vui lòng điền đầy đủ thông tin!")
+            }
+            else {
+                $.ajax({
+                    type: 'post',
+                    async: false,
+                    url: APIURL + '/api/DNNModule1/MonAnApi/Update',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(dataForm),
+                    dataType: "json",
+                    success: function (data) {
+                        alert("Cập nhật món ăn thành công!");
+                        $('#modalMonAnEdit').modal('show');
+                        $('#TenMonAdd').val("");
+                        $('#loaiMonAnSelect').val("");
+                        $('#NhaCungCapSelect').val("");
+                        $('#anhMonAnEdit').val("");
+                        $('#SoLuongAdd').val("");
+                        $('#GiaAdd').val("");
+                        $('#ThanhPhanAdd').val("");
+                        $('#modalMonAnEdit').modal('toggle');
+                        $('#dataGridMonAn').DataTable().ajax.reload();
+                    },
+                    error: function (err) {
+                        alert('Đã xảy ra lỗi, vui lòng thử lại saaau!');
+                    }
+                });
+            }
+        }
+
+    }
+    //delete
+    function Delete() {
+        var id = $('#IdMonAnDelete').val();
+        $.ajax({
+            type: 'delete',
+            async: false,
+            url: APIURL + '/api/DNNModule1/MonAnApi/Delete/?MaMonAn=' + id,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            success: function (data) {
+                alert("Xóa món ăn thành công!");
+                $('#modalMonAnDelete').modal('toggle');
+                $('#dataGridMonAn').DataTable().ajax.reload();
+            },
+            error: function (err) {
+                alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+            }
+        });
+    }
+    function preventMultipleSubmissions() {
+        $('#btnAdd').prop('disabled', true);
+        $('#btnAddNew').prop('disabled', true);
+        $('#btnUpdate').prop('disabled', true);
+    }
+    //xu ly upload file hinhtulieu
+    function Upload() {
+        var files = $('#AnhMonAnAdd').get(0).files;
+        
+        //Allowing file type
+        var pathFolder = "~/DesktopModules/MVC/DNNModule1/images";
+        var pathThuMuc = "/DesktopModules/MVC/DNNModule1/images";
+        var filePath = $('#AnhMonAnAdd').val();
+        if (filePath) {
+            var allowedExtensions =
+                /(\.jpg|\.jpeg|\.png|\.gif|\.bmp|\.webp|\.jfif)$/i;
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Loại tệp hình tư liệu không hợp lệ!');
+                $('#AnhMonAnAdd').val("");
+                return false;
+            }
+            else {
+                var size = Object.keys(files).length;
+                
+                var formData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    formData.append(files[i].name, files[i]);
+                    
+                }
+                $.ajax({
+                    async: false,
+                    url: APIURL + '/api/DNNModule1/UpLoadApi/UploadFiles/?pathFolder=' + pathFolder + '&pathThuMuc=' + pathThuMuc,
+                    method: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (dataFile) {
+                        //Lấy list các file đã upload thành công
+                        for (let i = 0; i < size; i++) {
+                            if (i == 0) {
+                                urlMonAn = dataFile[i].url;
+                                filenameMonAn = dataFile[i].fileName;
+                            }
+
+                            else {
+                                urlMonAn += "," + dataFile[i].url;
+                                filenameMonAn += "," + dataFile[i].fileName;
+
+                            }
+                        }
+                    },
+                    error: function (err) {
+                        alert("Upload Failed!");
+
+                    }
+                })
+                console.log(urlMonAn);
+                console.log(filenameMonAn);
+                //insert url vao path trong CSDL
+                InsertFileImage();
+            }
+        }
+    }
+    function UploadAnhEdit() {
+
+        //xu ly upload file hinhtulieu
+        var files = $('#anhMonAnEdit').get(0).files;
+        // Allowing file type
+        var filePath = $('#anhMonAnEdit').val();
+        if (filePath) {
+            var allowedExtensions =
+                /(\.jpg|\.jpeg|\.png|\.gif|\.bmp|\.webp|\.jfif)$/i;
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Loại tệp hình tư liệu không hợp lệ!');
+                $('#anhMonAnEdit').val("");
+                return false;
+            }
+            else {
+                var size = Object.keys(files).length;
+                var formData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    formData.append(files[i].name, files[i]);
+                }
+                var pathFolder = "~/DesktopModules/MVC/DNNModule1/images";
+                var pathThuMuc = "/DesktopModules/MVC/DNNModule1/images";
+                $.ajax({
+                    async: false,
+                    url: APIURL + '/api/DNNModule1/UpLoadApi/UploadFiles/?pathFolder=' + pathFolder + '&pathThuMuc=' + pathThuMuc,
+                    method: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (dataFile) {
+                        //Lấy list các file đã upload thành công
+                        for (let i = 0; i < size; i++) {
+                            if (i == 0) {
+                                urlMonAn = dataFile[i].url;
+                                filenameMonAn = dataFile[i].fileName;
+                            }
+                            else {
+                                urlMonAn += "," + dataFile[i].url;
+                                filenameMonAn = dataFile[i].fileName;
+                            }
+                            $('#modalMonAnEdit').modal('toggle');
+                            console.log(urlMonAn);
+                        }
+                    },
+                    error: function (err) {
+                        alert("Upload Failed!");
+                    }
+                })
+                InsertFileEdit();
+            }
+        }
+    }
+    //InsertFile cua Add
+    function InsertFileImage() {
+        var title = filenameMonAn;
+        var path = urlMonAn;
+        const dataForm = {
+            "Path": path,
+            "Title": title,
+        };
+        $.ajax({
+            async: false,
+            type: 'post',
+            url: APIURL + '/api/DNNModule1/MonAnApi/InsertFile',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(dataForm),
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                alert('lỗi.');
+            }
+        });
+        GetFileID();
+    }
+    //Lay ID cua File tu Path trong CSDL
+    function GetFileID() {
+        var path = urlMonAn;
+        if (path.trim() == "") {
+            alert("Path rong")
+        }
+        else {
+            $.ajax({
+                type: 'get',
+                async: false,
+                url: APIURL + '/api/DNNModule1/MonAnApi/GetByIdFile/?path=' + path,
+                success: function (data) {
+                    FileId = data;
+                    console.log(data);
+                },
+                error: function (err) {
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                }
+            });
+
+        }
+    }
+    //Insertfile cua Edit
+    function InsertFileEdit() {
+        var fileid = $('#MaAnhEdit').val();
+        var title = filenameMonAn;
+        var path = urlMonAn;
+        const dataForm = {
+            "FileID": fileid,
+            "Path": path,
+            "Title": title,
+        };
+        $.ajax({
+            async: false,
+            type: 'post',
+            url: APIURL + '/api/DNNModule1/MonAnApi/UpdateFile',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(dataForm),
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $('#modalMonAnEdit').modal('toggle');
+            },
+            error: function (err) {
+                alert('lỗi.');
+            }
+        });
+        GetFileID();
+    }
+
+    //function SoSanh() {
+    //    var a = "nghiên cứu khoa học công nghệ";
+    //    var b = "nghiên cứu khoa";
+    //    var dai = [];
+    //    var ngan = [];
+
+    //    var lsta = a.split(" ");
+    //    var lstb = b.split(" ");
+    //    if (lsta.length > lstb.length) {
+    //        dai = lsta;
+    //        ngan = lstb;
+    //    }
+    //    else {
+    //        dai = lstb;
+    //        ngan = lsta;
+    //    }
+    //    dem = 0;
+    //    mauso = dai.length;
+    //    ngan.forEach(function (item, index) {
+    //        dai.forEach(function (item1, index1) {
+    //            if (item1 == item) {
+    //                dem = dem + 1;
+    //            }
+    //        })
+    //    })
+    //    console.log(dem*100/mauso);
+
+    //}
+    //SoSanh();
+
+</script>
+
+
+
+
+
+

@@ -1,0 +1,277 @@
+﻿/*RESPONSIVE table*/
+@media (max-width: 1200px) {
+    .table-tree-wrapper > div {
+        overflow-x: auto;
+    }
+
+    .table-tree-wrapper .dataTables_wrapper {
+        min-width: 1200px;
+    }
+}
+table.dataTable {
+    table-layout: fixed;
+    width: 100%;
+}
+
+    table.dataTable.nowrap th, table.dataTable.nowrap td {
+        white-space: break-spaces;
+    }
+/* DataTable
+-------------------------------------------------- */
+
+table.dataTable {
+    /*    border: 1px solid rgba(76,106,224, 0.1);
+*/
+    border: none;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    border-collapse :collapse !important;
+}
+
+    table.dataTable.no-footer {
+        border-bottom: none !important;
+    }
+
+    table.dataTable thead th, table.dataTable thead td {
+        background: linear-gradient(0deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), #FFB800;
+/*        box-shadow: inset 1px 1px 1px 1px #FFE399;
+*/        opacity: 1;
+        text-align: left;
+        font-family: "Roboto Bold", sans-serif;
+        letter-spacing: 0px;
+        color: #00123D !important;
+        opacity: 1;
+        border-bottom: none !important;
+/*        border-right: 1px solid #FFE399;
+*/    }
+
+.table-bordered td, .table-bordered th {
+    /*box-shadow: inset 1px 1px 1px #EDF0FC;*/
+    /*border-right: 1px solid #EDF0FC;
+    border-bottom :1px solid #EDF0FC;*/
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+}
+
+table .thead {
+    border-right: 1px solid #FFE399;
+}
+table .tbody {
+    border-right: 1px solid #EDF0FC;
+}
+
+.dataTables_paginate.paging_simple_numbers {
+    margin-top: 20px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 3px 10px !important;
+}
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        background: #fff !important;
+        border: 1px solid #372816;
+        border-radius: 4px !important;
+        color: #372816 !important;
+        opacity: 1;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: #fff !important;
+        color: #372816 !important;
+        border: none;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+        background: #FFFFFF 0% 0% no-repeat padding-box !important;
+        color: #372816 !important;
+    }
+
+table.dataTable {
+    min-width: 768px;
+    word-wrap: break-word;
+}
+
+.command-icon {
+    font-size: 16px;
+    margin: 0 12px;
+    cursor: pointer;
+}
+
+.stt-text {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #02153B;
+    opacity: 1;
+}
+
+.dataTables_filter {
+    display: none;
+}
+/* SEARCH BOX*/
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+} 
+/*container fluid second*/
+.container-fluid-second {
+    background-color: white;
+    padding:24px;
+    border-radius: 8px;
+    
+}
+.header-style {
+    padding: 20px 0px;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 0px;
+}
+/* Table detail*/
+
+.loai-hinh-title {
+    font-weight:bold;
+}
+button[data-dismiss='modal'][class ='btn btn-outline-secondary'] {
+    background-color: white;
+    color: #1B93EB;
+    font-size: 16px;
+    border: 1px solid #E8E6E6;
+    float:right;
+}
+.btn-submit-form {
+    background-color: #059B65 !important;
+}
+.btn-close-form {
+    background-color: #E15151 !important;
+        color:white;
+}
+#hinhTuLieuEdit, #trinhDienEdit {
+    height: 45px;
+}
+
+button[class="btn btn-submit-form btn-primary text-white"] {
+    background-color: #1B93EB !important;
+}
+button[class="btn btn-close-form btn-outline-danger"] {
+    background-color: white !important;
+    color: #E15151 !important
+}
+/*BUTTON*/
+.detail-VuDaoTuong {
+    color: #059B65 !important;
+}
+.tim-kiem-btn {
+    background-color: antiquewhite;
+    border: solid 1px #372816;
+}
+    .tim-kiem-btn:hover {
+        color: white;
+        background-color: #372816;
+    }
+.btn-style_xuatfile {
+    border: solid 1px #059B65 !important;
+    color: #059B65 !important;
+    background-color:white;
+}   
+    .btn-style_themmoi {
+        background-color: #059B65 !important;
+        border: solid 1px #059B65 !important;
+    }
+.btn-style_xoa {
+    background-color: #E15151 !important;
+    border: solid 1px #E15151 !important;
+}
+.command-icon {
+    margin-right:5px;
+    font-size:18px;
+}
+.center-align {
+    text-align:center
+}
+.center-align {
+    text-align:center;
+}
+/*select drop */
+.select2-container--default .select2-selection--single {
+    height: 40px !important;
+    padding: 5px !important;
+}
+    .select2-selection--single .select2-selection__arrow {
+        top:6px !important;
+    }
+.form-content-detail {
+    font-weight:bold;
+    text-align:justify;
+}
+.btn-delete {
+    background-color: #1B93EB;
+}
+.nameDelete {
+    color: #E15151;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), #E15151;
+    border-radius: 4px;
+    padding: 5px 20px;
+    border: 1px solid;
+    margin-bottom:30px;
+}
+.bottom-content-delete {
+    text-align:center;
+}
+.icon-delete {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.bottom-content-delete .form-group {
+    font-weight:500;
+}
+.justify-content-center {
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+}
+.footer-button {
+    float:right
+}
+.form-content-detail {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+}
+input[type='file'] {
+    height:45px !important;
+}
+.container-noidung {
+    font-family: Roboto;
+}
+.bold-text {
+    font-family: "Roboto Medium";
+}
+.fa-eye {
+    color: #059B65 !important;
+}
+.modal-body {
+    padding : 24px;
+}
+.dt-button.buttons-excel.buttons-html5 {
+    display: none !important;
+}
+.hidden-long-text-4-line {
+    display: -webkit-box;
+    -webkit-line-clamp: 5 !important;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
