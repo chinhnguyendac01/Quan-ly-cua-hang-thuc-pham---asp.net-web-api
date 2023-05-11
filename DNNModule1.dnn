@@ -279,5 +279,65 @@
 			  </component>
 		  </components>
 	  </package>
+	  <package name="DNNModule1_CungCap" type="Module" version="00.00.01">
+		  <friendlyName>DNNModule1_CungCap</friendlyName>
+		  <description>DNNModule1_CungCap</description>
+		  <iconFile>~/Icons/Sigma/Software_32X32_Standard.png</iconFile>
+		  <owner>
+			  <name>Christoc.com</name>
+			  <organization>Christoc.com</organization>
+			  <url>https://www.christoc.com/</url>
+			  <email>modules@christoc.com</email>
+		  </owner>
+		  <license src="License.txt"></license>
+		  <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
+		  <dependencies>
+			  <dependency type="CoreVersion">08.00.00</dependency>
+		  </dependencies>
+		  <components>
+			  <component type="ResourceFile">
+				  <resourceFiles>
+					  <basePath>DesktopModules/MVC/DNNModule1</basePath>
+					  <resourceFile>
+						  <name>Resources.zip</name>
+					  </resourceFile>
+				  </resourceFiles>
+			  </component>
+			  <component type="Module">
+				  <desktopModule>
+					  <moduleName>DNNModule1_CungCap</moduleName>
+					  <foldername>DNNModule1</foldername>
+					  <businessControllerClass>Christoc.Modules.DNNModule1.Components.FeatureController</businessControllerClass>
+					  <supportedFeatures />
+					  <moduleDefinitions>
+						  <moduleDefinition>
+							  <friendlyName>DNNModule1_CungCap</friendlyName>
+							  <defaultCacheTime>0</defaultCacheTime>
+							  <moduleControls>
+								  <moduleControl>
+									  <controlKey />
+									  <controlSrc>Christoc.Modules.DNNModule1.Controllers/CungCap/Index.mvc</controlSrc>
+									  <supportsPartialRendering>False</supportsPartialRendering>
+									  <controlTitle />
+									  <controlType>View</controlType>
+									  <iconFile />
+									  <helpUrl />
+									  <viewOrder>0</viewOrder>
+								  </moduleControl>
+							  </moduleControls>
+						  </moduleDefinition>
+					  </moduleDefinitions>
+				  </desktopModule>
+			  </component>
+			  <component type="Assembly">
+				  <assemblies>
+					  <assembly>
+						  <name>DNNModule1.dll</name>
+						  <path>bin</path>
+					  </assembly>
+				  </assemblies>
+			  </component>
+		  </components>
+	  </package>
   </packages>
 </dotnetnuke>

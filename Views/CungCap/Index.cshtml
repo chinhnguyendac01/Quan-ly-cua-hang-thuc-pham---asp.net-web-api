@@ -4,5 +4,445 @@
     Layout = "~/DesktopModules/MVC/DNNModule1/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div>
+    <h3 class="admin-page-content-title header-style">Nhà cung cấp</h3>
+    <div class="tab-content admin-content-wrapper">
+        <div class="container-fluid container-fluid-second">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <div class="search-group-table-item search-group-table-item-n-btn form-group has-search">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input class="form-control" placeholder="Từ khóa" id="tu-khoa-text-box-menu" oninput="timKiem();" type="text" />
+                    </div>
+                </div>
+                <div class="col-6" style="text-align:right;margin-bottom:1rem">
+                    <button type="button" class="btn btn-success btn-style_themmoi" data-toggle="modal" data-target="#modalNhaCungCapAdd">
+                        <span>Thêm mới</span>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-style_xoa" id="btnXoaAll">
+                        <span>Xóa</span>
+                    </button>
+                    <!-- Button trigger modal -->
+
+                    <button id="modal-btn-edit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalNhaCungCapEdit" style="display: none">
+                        Cập nhật nhà cung cấp
+                    </button>
+                    <button id="modal-btn-delete" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalNhaCungCapDelete" style="display: none">
+                        Xóa nhà cung cấp
+                    </button>
+                </div>
+            </div>
+            <div class="table-tree-wrapper">
+                <div style="width:100%; margin:0 auto;" id="hidden-table">
+                    <table id="dataGridNhaCungCap" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Stt</th>
+                                <th>Tên Liên Hệ</th>
+                                <th>Địa chỉ</th>
+                                <th>Điện Thoại</th>
+                                <th>Mã bưu điện</th>
+                                <th>Quốc gia</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <!-- Modal add-->
+            <div class="modal fade" id="modalNhaCungCapAdd" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="loai-hinh-title" id="modalNhaCungCapLabelAdd">Thêm mới nhà cung cấp</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="formNhaCungCapAdd">
+                                <div class="form-group">
+                                    <label for="tenLoaiInput" class="editor-label">Loại nhạc cụ:<span class="red-text"> *</span></label>
+                                    <input class="form-control" id="tenLoaiAdd" required onKeyUp="KiemTra();" />
+                                    <label class="text-danger" id="tenLoai_warning"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="moTaInput" class="editor-label">Mô tả:</label>
+                                    <textarea id="moTaAdd" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="btnAdd" onclick="NhaCungCapAdd();" class="btn btn-submit-form btn-success">Lưu</button>
+                                    <button type="button" id="btnAddNew" onclick="NhaCungCapAddNew();" class="btn btn-primary text-white">Lưu và thêm mới</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal edit-->
+            <div class="modal fade" id="modalNhaCungCapEdit" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="loai-hinh-title" id="modalNhaCungCapLabelEdit">Chỉnh sửa nhà cung cấp</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="formNhaCungCapEdit">
+                                <input type="hidden" class="form-control" id="IdNhaCungCapEdit">
+                                <div class="form-group">
+                                    <label for="loaiNhacCuInput" class="editor-label">Loại nhạc cụ:<span class="red-text"> *</span></label>
+                                    <input class="form-control" id="loaiNhacCuInputEdit" required onKeyUp="KiemTra();" />
+                                    <label class="text-danger" id="loaiNhacCu_warningEdit"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="moTaInput" class="editor-label">Mô tả:</label>
+                                    <textarea id="moTaEdit" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="btnUpdate" onclick="Update();" class="btn btn-submit-form btn-success">Lưu</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--modal delete-->
+            <div class="modal fade" id="modalNhaCungCapDelete" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="icon-delete">
+                                <img src="~/desktopmodules/mvc/DNNModule1/css/remove.svg" alt="Girl in a jacket" width="60" height="60">
+                            </div>
+                            <form role="form" id="formTheLoaiDelete" class="bottom-content-delete">
+                                <input type="hidden" class="form-control" id="IdNhaCungCapDelete">
+                                <div class="form-group">
+                                    Bạn có chắc chắn muốn xóa nhà cung cấp?
+                                </div>
+                                <label id="tenLoaiDel" class="nameDelete"></label>
+                                <div>
+                                    <button type="button" onclick="Delete();" class="btn btn-primary text-white">Đồng ý</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--modal delete multiple-->
+            <div class="modal fade" id="modalNhaCungCapDelAll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="icon-delete">
+                                <img src="~/desktopmodules/mvc/DNNModule1/css/remove.svg" alt="Girl in a jacket" width="60" height="60">
+                            </div>
+                            <form role="form" class="bottom-content-delete">
+                                <div class="form-group">
+                                    Bạn có chắc chắn muốn xóa nhà cung cấp đã chọn?
+                                </div>
+                                <div>
+                                    <button type="button" id="btnXoaAllSelect" class="btn btn-primary text-white">Đồng ý</button>
+                                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var url = window.location;
+    var APIURL = url.protocol + "//" + url.hostname + url.port;
+    //timkiem
+    function timKiem() {
+        var tuKhoa = $('#tu-khoa-text-box-menu').val();
+        $('#dataGridNhaCungCap').DataTable()
+            .search(tuKhoa).draw();
+    }
+    //end
+    $(document).ready(function () {
+
+        var table = $('#dataGridNhaCungCap').dataTable({
+            "autoWidth": false,
+            "ordering": false,
+            "bInfo": false,
+            "bLengthChange": false,
+            "filter": true,
+            "language": {
+                "sProcessing": "Đang xử lý...",
+                "sLengthMenu": "Hiện: _MENU_",
+                "sZeroRecords": "Không có dữ liệu",
+                "sEmptyTable": "Bảng trống",
+                "sInfo": "Hiện dòng _START_ đến _END_ trong tổng _TOTAL_ dòng",
+                "sInfoEmpty": "Hiện dòng 0 đến 0 trong tổng 0 dòng",
+                //"sInfoPostFix": "Tìm kiếm...",
+                "sSearch": "Tìm kiếm",
+                "sLoadingRecords": "Đang tải...",
+                paginate: {
+                    next: '<i class="fas fa-chevron-right paging-chevron">',
+                    previous: '<i class="fas fa-chevron-left paging-chevron">'
+                }
+            },
+            "ajax": {
+                url: APIURL + "/api/DNNModule1/CungCapApi/Gets",
+                type: "GET",
+                dataSrc: function (data) {
+                    console.log(data)
+                    for (let i = 0; i < data.length; i++) {
+                        data[i].stt = i + 1;
+                    }
+                    return data;
+                },
+            },
+            columnDefs: [
+                {
+                    'targets': 0,
+                    'checkboxes': {
+                        'selectRow': true
+                    }
+                },
+                {
+                    targets: [2],
+                    render: function (data, type, row, meta) {
+                        return '<div class="hidden-long-text-4-line"> ' + data + '</div>';
+                    }
+                },
+                {
+                    targets: 7,
+                    render: function (data, type, row, meta) {
+                        return '<i class="fas fa-edit edit-NhaCungCap blue-text command-icon" id=n-"' + meta.row + '"></i><i class="far fa-trash-alt delete-NhaCungCap red-text command-icon" id=n-"' + meta.row + '"></i>';
+                    }
+
+                }
+            ],
+            'select': {
+                'style': 'multi'
+            },
+            'order': [[1, 'asc']],
+            "columns": [
+                { data: "CungCapID", "width": "30px", "class": "stt-text center-align not-export-col" },
+                { data: "stt", "width": "50px", "class": "stt-text center-align" },
+                { data: "TenLienHe", "class": "left-align" },
+                { data: "DiaChi", "class": "left-align" },
+                { data: "DienThoai", "class": "left-align" },
+                { data: "MaBuudien", "class": "left-align" },
+                { data: "Quocgia", "class": "left-align" },
+            ]
+        });
+        $('#dataGridNhaCungCap tbody').on('click', '.delete-NhaCungCap', function () {
+            var id = $(this).attr("id").match(/\d+/)[0];
+            var data = $('#dataGridNhaCungCap').DataTable().row(id).data();
+            $('#IdNhaCungCapDelete').val(data.MaLoai);
+            $('#tenLoaiDel').text(data.TenLoai);
+            $('#modal-btn-delete').click();
+        });
+        $('#dataGridNhaCungCap tbody').on('click', '.edit-NhaCungCap', function () {
+            var id = $(this).attr("id").match(/\d+/)[0];
+            var data = $('#dataGridNhaCungCap').DataTable().row(id).data();
+            let idNhaCungCap = data.MaLoai;
+            $.ajax({
+                async: false,
+                type: 'get',
+                url: APIURL + '/api/DNNModule1/NhaCungCapApi/GetById/?MaLoai=' + idNhaCungCap,
+                success: function (data) {
+                    $('#IdNhaCungCapEdit').val(data.MaLoai);
+                    $('#loaiNhacCuInputEdit').val(data.TenLoai);
+                    $('#moTaEdit').val(data.MoTa);
+                },
+                error: function (err) {
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                }
+            });
+            $('#modal-btn-edit').click();
+        });
+        //del mutiple
+        $('#btnXoaAll').on('click', function (e) {
+            console.log(table.api().column(0));
+            var rows_selected = table.api().column(0).checkboxes.selected();
+            var form = this;
+            $.each(rows_selected, function (index, rowId) {
+                // Create a hidden element
+                $(form).append(
+                    $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'id[]')
+                        .val(rowId)
+                );
+            });
+            let idNhaCungCap = rows_selected.join(",");
+            if (idNhaCungCap == null || idNhaCungCap == '') {
+                alert('Vui lòng chọn nhà cung cấp muốn xóa!');
+            }
+            else {
+                $('#modalNhaCungCapDelAll').modal('show');
+                $('#btnXoaAllSelect').on('click', function (e) {
+                    $.ajax({
+                        type: 'delete',
+                        async: false,
+                        url: APIURL + '/api/DNNModule1/NhaCungCapApi/DeleteMutiple/?lstID=' + idNhaCungCap,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        success: function (data) {
+                            alert("Xóa nhà cung cấp thành công!");
+                            $('#modalNhaCungCapDelAll').modal('toggle');
+                            location.reload();
+                        },
+                        error: function (err) {
+                            alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                        }
+                    });
+                });
+            }
+        })
+        $('#modalNhaCungCapAdd').on('hidden.bs.modal', function () {
+            $('#tenLoaiAdd').val("");
+            $('#moTaAdd').val("");
+            $('#tenLoai_warning').text("");
+        });
+        $('#modalNhaCungCapEdit').on('hidden.bs.modal', function () {
+            $('#loaiNhacCu_warningEdit').text("");
+        });
+    });
+    function KiemTra() {
+        if (tenLoaiAdd.value.length > 50) $('#tenLoai_warning').text("Độ dài vượt quá 50 ký tự cho phép!");
+        else $('#tenLoai_warning').text("");
+        if (loaiNhacCuInputEdit.value.length > 50) $('#loaiNhacCu_warningEdit').text("Độ dài vượt quá 50 ký tự cho phép!");
+    }
+    //add
+    function NhaCungCapAdd() {
+        var loaiNhacCu = $('#tenLoaiAdd').val();
+        var mota = $('#moTaAdd').val();
+        const dataForm = {
+            "MaLoai": 0,
+            "TenLoai": loaiNhacCu,
+            "MoTa": mota
+        };
+        if (loaiNhacCu.trim() == "") {
+            alert("Vui lòng điền đầy đủ thông tin!")
+        }
+        else {
+            $.ajax({
+                async: false,
+                type: 'post',
+                url: APIURL + '/api/DNNModule1/NhaCungCapApi/Insert',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify(dataForm),
+                dataType: "json",
+                success: function (data) {
+                    alert("Thêm mới nhà cung cấp thành công!")
+                    $('#modalNhaCungCapAdd').modal('toggle');
+                    $('#dataGridNhaCungCap').DataTable().ajax.reload();
+                },
+                error: function (err) {
+                    alert('Lỗi.');
+                }
+            });
+        }
+    }
+    //save and add new
+    function NhaCungCapAddNew() {
+        var loaiNhacCu = $('#tenLoaiAdd').val();
+        var moTa = $('#moTaAdd').val();
+        const dataForm = {
+            "MaLoai": 0,
+            "TenLoai": loaiNhacCu,
+            "MoTa": moTa
+        };
+        if (loaiNhacCu.trim() == "") {
+            alert("Vui lòng điền đầy đủ thông tin!")
+        }
+        else {
+            $.ajax({
+                async: false,
+                type: 'post',
+                url: APIURL + '/api/DNNModule1/NhaCungCapApi/Insert',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify(dataForm),
+                dataType: "json",
+                success: function (data) {
+                    alert("Thêm mới nhà cung cấp thành công!")
+                    $('#tenLoaiAdd').val("");
+                    $('#moTaAdd').val("");
+                    $('#dataGridNhaCungCap').DataTable().ajax.reload();
+                },
+                error: function (err) {
+                    alert('Lỗi.');
+                }
+            });
+        }
+    }
+    //update
+    function Update() {
+        var tenLoai = $('#loaiNhacCuInputEdit').val();
+        var maLoai = $('#IdNhaCungCapEdit').val();
+        var moTa = $('#moTaEdit').val();
+        const dataForm = {
+            "MaLoai": maLoai,
+            "TenLoai": tenLoai,
+            "MoTa": moTa
+        };
+        if (tenLoai.trim() == "") {
+            alert("Vui lòng điền đầy đủ thông tin!")
+        }
+        else {
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: APIURL + '/api/DNNModule1/NhaCungCapApi/Update',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify(dataForm),
+                dataType: "json",
+                success: function (data) {
+                    alert("Cập nhật nhà cung cấp thành công!");
+                    $('#modalNhaCungCapEdit').modal('toggle');
+                    $('#dataGridNhaCungCap').DataTable().ajax.reload();
+                },
+                error: function (err) {
+                    alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                }
+            });
+        }
+    }
+    //delete
+    function Delete() {
+        var id = $('#IdNhaCungCapDelete').val();
+        $.ajax({
+            type: 'delete',
+            async: false,
+            url: APIURL + '/api/DNNModule1/NhaCungCapApi/Delete/?MaLoai=' + id,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            success: function (data) {
+                alert("Xóa nhà cung cấp thành công!");
+                $('#modalNhaCungCapDelete').modal('toggle');
+                $('#dataGridNhaCungCap').DataTable().ajax.reload();
+            },
+            error: function (err) {
+                alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+            }
+        });
+    }
+    function preventMultipleSubmissions() {
+        $('#btnAdd').prop('disabled', true);
+        $('#btnAddNew').prop('disabled', true);
+        $('#btnUpdate').prop('disabled', true);
+    }
+</script>
 
