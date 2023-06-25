@@ -1,9 +1,10 @@
 Website quản lý cửa hàng thực phẩm (trang admin):
  
 Backend:viết api bằng asp.net 
+
 Frontend: tạo giao diện bằng boostrap, gọi api thao tác đỗ dữ liệu bằng ajax 
 
-Vì là trang admin nên có thể login vào 
+
 - Login có sử dụng cookie mã hóa thông tin người dùng
 - Thêm sửa xóa sản phẩm,loại sản phẩm, nhà cung cấp nhân viên, shipper, và order sản phẩm cho khách hàng
 - Sắp xếp theo giá , ngày, upload ảnh
